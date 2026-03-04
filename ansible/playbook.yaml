@@ -1,0 +1,26 @@
+---
+- name: Setup DevOps Environment
+  hosts: local
+  become: true
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install required packages
+      apt:
+        name:
+          - curl
+          - git
+          - python3-pip
+        state: present
+
+    - name: Verify Docker installation
+      command: docker --version
+      register: docker_version
+      changed_when: false
+
+    - name: Show Docker version
+      debug:
+        msg: "Docker installed: {{ docker_version.stdout }}"
